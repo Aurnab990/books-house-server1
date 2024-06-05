@@ -48,34 +48,27 @@ async function run() {
         const result = await booksCollection.deleteOne(query);
         res.send(result);
       });
-    //   app.put('/books/:id', async(req, res) =>{
-    //   const id = req.params.id;
-    //   const updateItem = req.body;
-    //   const query = {_id:new ObjectId(id)};
-    //   const options= { upsert: true};
-    //   const updatedDoc ={
-    //     $set: {
-    //       name: updateItem.name,
-    //       phone: updateItem.phone,
-    //       address: updateItem.address
-          
-    //     }
-    //   };
-    //   // console.log(updatedDoc);
-    //   const result = await booksCollection.updateOne(query, updatedDoc, options);
-      
-    //   res.send(result);
-      
-    // })
+      app.put('/books/:id', async(req, res) =>{
+        const id = req.params.id;
+        const updateItem = req.body;
+        const query = {_id:new ObjectId(id)};
+        const options= { upsert: true};
+        const updatedDoc ={
+          $set: {
+            name: updateItem.name,
+            price: updateItem.price,
+            stocks: updateItem.stocks
+          }
+        };
+        // console.log(updatedDoc);
+        const result = await booksCollection.updateOne(query, updatedDoc, options);
+        
+        res.send(result);
+        
+      })
 
       //USERS MANAGEMENT
-      // app.get('/user', async(req,res)=>{
-      //   const query = {};
-      //   const cursor = userCollection.find(query);
-      //   const items = await cursor.toArray();
-      //   res.send(items);
-  
-      // });
+      
       app.post('/user', async(req,res)=>{
         const user = req.body;
         const isUserExists = await userCollection.findOne({email: user?.email});
@@ -88,13 +81,41 @@ async function run() {
         res.send(result);
       });
 
-      // app.get('/user/:email', async(req,res)=>{
-      //   const email = req.params.email;
-      //   // console.log(email);
-      //   const result = await userCollection.findOne({email: email});
-      //   console.log(result)
-      //   res.send(result)
-      // })
+      app.get('/user', async(req,res)=>{
+        const query = {};
+        const cursor = userCollection.find(query);
+        const items = await cursor.toArray();
+        res.send(items);
+  
+      });
+
+      app.get('/user/:email', async(req,res)=>{
+        const email = req.params.email;
+        // console.log(email);
+        const result = await userCollection.findOne({email: email});
+        res.send(result);
+      });
+
+      app.put('/user/:id', async(req, res) =>{
+        const id = req.params.id;
+        // console.log(id);
+        const updateItem = req.body;
+        const query = {_id:new ObjectId(id)};
+        const options= { upsert: true};
+        const updatedDoc ={
+          $set: {
+            name: updateItem.name,
+            email: updateItem.email,
+            
+          }
+        };
+        // console.log(updatedDoc);
+        const result = await userCollection.updateOne(query, updatedDoc, options);
+        
+        res.send(result);
+        
+      })
+   
     
   
     } finally {
